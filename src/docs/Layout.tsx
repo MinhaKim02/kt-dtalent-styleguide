@@ -111,46 +111,50 @@ export function Layout() {
   )
 }
 
-// 왼쪽 메뉴. 고른 표시(흰 바탕 + KT 스퀘어) 하나가 위아래로 미끄러져 옮겨 간다(서비스 담당자 메뉴와 같은 움직임)
+// 왼쪽 메뉴. 묶음 이름은 진한 굵은 글자, 항목은 왼쪽 세로선 안쪽으로 한 단계 들여서 묶음과 항목을 나눈다.
+// 고른 표시(흰 바탕) 하나가 위아래로 미끄러져 옮겨 가고, KT 스퀘어는 세로선 위에 놓인다(서비스 담당자 메뉴와 같은 움직임)
 function SideNav({ pathname }: { pathname: string }) {
   const ref = useRef<HTMLElement>(null)
-  const [mark, setMark] = useState<{ y: number; h: number; ready: boolean } | null>(null)
+  const [mark, setMark] = useState<{ x: number; y: number; w: number; h: number; ready: boolean } | null>(null)
 
   useLayoutEffect(() => {
     const el = ref.current?.querySelector<HTMLElement>('a[aria-current="page"]')
     if (!el) return setMark(null)
-    setMark((m) => ({ y: el.offsetTop, h: el.offsetHeight, ready: m !== null }))
+    setMark((m) => ({ x: el.offsetLeft, y: el.offsetTop, w: el.offsetWidth, h: el.offsetHeight, ready: m !== null }))
   }, [pathname])
 
   return (
-    <nav ref={ref} aria-label="문서" className="relative flex flex-col gap-6 px-4 pt-6 pb-10 lg:pt-2">
+    <nav ref={ref} aria-label="문서" className="relative flex flex-col gap-7 px-4 pt-6 pb-10 lg:pt-2">
       {mark && (
         <span
           aria-hidden
-          className={cn('absolute inset-x-4 top-0 rounded-md bg-surface', mark.ready && 'transition-transform duration-(--motion-slow) ease-(--ease-standard)')}
-          style={{ height: mark.h, transform: `translateY(${mark.y}px)` }}
+          className={cn('absolute top-0 left-0 rounded-md bg-surface', mark.ready && 'transition-transform duration-(--motion-slow) ease-(--ease-standard)')}
+          style={{ width: mark.w, height: mark.h, transform: `translate(${mark.x}px, ${mark.y}px)` }}
         >
-          <KtSquare className="absolute top-1/2 -left-1 -translate-y-1/2" />
+          {/* 세로선(항목 왼쪽 8px 바깥) 한가운데에 놓는다 */}
+          <KtSquare className="absolute top-1/2 -left-[13px] -translate-y-1/2" />
         </span>
       )}
       {nav.map((g) => (
-        <div key={g.label} className="flex flex-col gap-1">
-          <p className="px-3 pb-1 text-overline text-ink-3">{g.label}</p>
-          {g.items.map((it) => (
-            <NavLink
-              key={it.path}
-              to={it.path}
-              end
-              className={({ isActive }) =>
-                cn(
-                  'relative z-10 flex min-h-10 items-center rounded-md px-3 text-body text-ink-2 no-underline transition-colors hover:text-ink',
-                  isActive ? 'font-semibold text-ink' : 'hover:bg-control-tonal',
-                )
-              }
-            >
-              {it.label}
-            </NavLink>
-          ))}
+        <div key={g.label} className="flex flex-col gap-2">
+          <p className="px-3 text-label-sm font-bold text-ink">{g.label}</p>
+          <div className="ml-3 flex flex-col gap-0.5 border-l border-line">
+            {g.items.map((it) => (
+              <NavLink
+                key={it.path}
+                to={it.path}
+                end
+                className={({ isActive }) =>
+                  cn(
+                    'relative z-10 ml-2 flex min-h-9 items-center rounded-md px-3 text-body no-underline transition-colors',
+                    isActive ? 'font-semibold text-ink' : 'text-ink-3 hover:bg-control-tonal hover:text-ink',
+                  )
+                }
+              >
+                {it.label}
+              </NavLink>
+            ))}
+          </div>
         </div>
       ))}
     </nav>
