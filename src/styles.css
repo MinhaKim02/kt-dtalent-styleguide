@@ -1,0 +1,32 @@
+/* 서비스와 같은 토큰, 글꼴, 유틸리티를 그대로 쓴다(프론트 레포의 index.css) */
+@import '../.frontend/src/index.css';
+/* .frontend는 git에서 빼 두어 Tailwind가 자동으로 읽지 않으므로 직접 알려 준다 */
+@source '../.frontend/src';
+
+@layer base {
+  body {
+    background: var(--color-surface);
+  }
+  ::selection {
+    background: var(--color-gray-200);
+  }
+}
+
+/* 문서 본문의 글. 읽는 글은 한 줄이 너무 길지 않게 */
+.prose {
+  max-width: 44rem;
+}
+.prose p {
+  margin: 0;
+}
+.prose code,
+.doc-code {
+  font-family: ui-monospace, 'SFMono-Regular', Menlo, Consolas, monospace;
+  font-size: 0.875em;
+  padding: 0.1em 0.35em;
+  border-radius: var(--radius-xs, 2px);
+  background: var(--color-surface-sunken);
+  color: var(--color-ink);
+  word-break: break-all;
+}
+@source inline("text-{display,display-sm,number,title-1,title-2,body,body-long,input-touch,body-strong,label,label-sm,caption,overline}");
