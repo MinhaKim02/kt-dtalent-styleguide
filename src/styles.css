@@ -30,3 +30,46 @@
   word-break: break-all;
 }
 @source inline("text-{display,display-sm,number,title-1,title-2,body,body-long,input-touch,body-strong,label,label-sm,caption,overline}");
+
+/* 스크롤하면 구역이 하나씩 떠오른다(useReveal). 장학생 화면 전환과 같은 길이와 곡선 */
+.reveal {
+  opacity: 0;
+  transform: translateY(16px);
+}
+.reveal.is-in {
+  opacity: 1;
+  transform: none;
+  transition:
+    opacity var(--motion-expressive) var(--ease-expressive-enter),
+    transform calc(var(--motion-expressive) * 1.5) var(--ease-expressive-enter);
+}
+
+/* 첫 화면: 브랜드 플로우를 화면 전체가 아니라 상자 안에 둔다 */
+.hero .brand-flow {
+  position: absolute;
+}
+
+/* 첫 화면 제목: 줄마다 차례로 올라온다 */
+@keyframes hero-line {
+  from {
+    opacity: 0;
+    transform: translateY(24px);
+  }
+}
+
+.hero-line {
+  animation: hero-line 0.8s cubic-bezier(0, 0, 0.3, 1) backwards;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .reveal {
+    opacity: 1;
+    transform: none;
+  }
+  .hero-line {
+    animation: none;
+  }
+}
+.doc-mono {
+  font-family: ui-monospace, 'SFMono-Regular', Menlo, Consolas, monospace;
+}

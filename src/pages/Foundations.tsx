@@ -2,6 +2,7 @@ import { useState } from 'react'
 import type { LucideIcon } from 'lucide-react'
 import * as used from 'virtual:used-icons'
 import { Button } from '@fe/components/ui/Button'
+import { useToast } from '@fe/components/ui/useToast'
 import { cn } from '@fe/lib/cn'
 import { Code, DocPage, Preview, RuleTable, Rules, Section, Specimen, Sub, Text, UseWhen } from '../docs/Doc'
 import { aliasOf, contrastOnWhite, resolveColor, tokens, usage, type Token } from '../docs/tokens'
@@ -26,9 +27,24 @@ function Swatch({ t }: { t: Token }) {
   const value = resolveColor(t.value)
   const alias = aliasOf(t.value)
   const ratio = textLike(t.name) ? contrastOnWhite(value) : null
+  const toast = useToast()
+  // 누르면 값을 복사한다
+  const copy = () => {
+    void navigator.clipboard?.writeText(value).then(
+      () => toast(`${t.name} ${value} 복사했어요`),
+      () => toast('복사하지 못했어요. 값을 직접 골라 복사하세요.'),
+    )
+  }
   return (
-    <div className="flex flex-col overflow-hidden rounded-lg bg-surface ring-1 ring-line-subtle">
-      <div className="h-16" style={{ background: value }} />
+    <button
+      type="button"
+      onClick={copy}
+      aria-label={`${t.name} ${value} 복사`}
+      className="group flex cursor-pointer flex-col overflow-hidden rounded-lg bg-surface text-left ring-1 ring-line-subtle transition-[box-shadow,translate] duration-(--motion-moderate) ease-(--ease-standard) hover:-translate-y-0.5 hover:shadow-pop focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-focus"
+    >
+      <div className="relative h-16 w-full" style={{ background: value }}>
+        <span className="absolute right-2 bottom-2 rounded-sm bg-surface/90 px-1.5 text-overline text-ink-2 opacity-0 transition-opacity group-hover:opacity-100">복사</span>
+      </div>
       <div className="flex flex-1 flex-col gap-1 p-4">
         <Code>{t.name}</Code>
         <p className="text-caption whitespace-pre-wrap text-ink-3 tabular-nums">
@@ -38,7 +54,7 @@ function Swatch({ t }: { t: Token }) {
         </p>
         <p className="mt-1 text-caption text-ink-2">{usage(t)}</p>
       </div>
-    </div>
+    </button>
   )
 }
 
@@ -54,7 +70,7 @@ export function ColorPage() {
   const all = tokens.color.tokens
   const get = (n: string) => all.find((c) => c.name === n)
   return (
-    <DocPage group={G} title="색" lead="흑백이 일을 하고, KT 레드는 서명만 합니다. 글자, 버튼, 선은 회색 단계로만 만들고, 레드는 KT 스퀘어와 로고, 첫 화면 그래픽에만 씁니다.">
+    <DocPage group={G} title="색" lead="흑백이 일을 하고, KT 레드는 서명만 합니다. 글자, 버튼, 선은 회색 단계로만 만들고, 레드는 KT 스퀘어와 로고, 첫 화면 그래픽에만 씁니다. 견본을 누르면 값이 복사돼요.">
       <Section title="원칙">
         <Rules
           items={[

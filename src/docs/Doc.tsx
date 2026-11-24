@@ -3,22 +3,32 @@ import { cn } from '@fe/lib/cn'
 
 // 문서 페이지의 공통 조각. 모든 페이지가 같은 순서와 모양으로 읽히게 한다
 
-export function DocPage({ group, title, lead, children }: { group: string; title: string; lead: ReactNode; children: ReactNode }) {
+export function DocPage({ group, title, lead, source, children }: { group: string; title: string; lead: ReactNode; source?: string[]; children: ReactNode }) {
   return (
-    <article className="flex flex-col gap-16">
-      <header className="prose flex flex-col gap-3">
+    <article className="flex flex-col gap-16 md:gap-20">
+      <header className="prose flex flex-col gap-4">
         <p className="text-label-sm text-ink-3">{group}</p>
-        <h1 className="m-0 text-display-sm">{title}</h1>
-        <p className="text-body-long text-ink-2">{lead}</p>
+        <h1 className="m-0 text-display-sm md:text-display">{title}</h1>
+        <p className="text-title-2 font-normal text-ink-2">{lead}</p>
+        {source && (
+          <p className="flex flex-wrap items-center gap-x-3 gap-y-1 pt-1 text-caption text-ink-3">
+            <span>코드</span>
+            {source.map((s) => (
+              <a key={s} href={`https://github.com/kt-dtalent-platform/frontend/blob/main/src/${s}`} target="_blank" rel="noreferrer" className="doc-mono text-ink-2 underline-offset-4 hover:text-ink">
+                {s.split('/').pop()}
+              </a>
+            ))}
+          </p>
+        )}
       </header>
       {children}
     </article>
   )
 }
 
-export function Section({ title, children, id }: { title: string; children: ReactNode; id?: string }) {
+export function Section({ title, children }: { title: string; children: ReactNode }) {
   return (
-    <section id={id} className="flex scroll-mt-24 flex-col gap-5">
+    <section id={title.replace(/[\s,]+/g, '-')} data-reveal className="flex scroll-mt-24 flex-col gap-5">
       <h2 className="m-0 text-title-1">{title}</h2>
       {children}
     </section>

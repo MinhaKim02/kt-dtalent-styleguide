@@ -37,7 +37,7 @@ const G = '컴포넌트'
 
 export function ButtonPage() {
   return (
-    <DocPage group={G} title="버튼" lead="행동을 실행합니다. 주요, 보조, 테두리 없음 세 종류와 네 가지 높이가 있습니다.">
+    <DocPage group={G} title="버튼" source={['components/ui/Button.tsx', 'components/ui/buttonClass.ts']} lead="행동을 실행합니다. 주요, 보조, 테두리 없음 세 종류와 네 가지 높이가 있습니다.">
       <Preview>
         <div className="flex flex-wrap items-center gap-3">
           <Button variant="primary">제출하기</Button>
@@ -146,7 +146,7 @@ export function ButtonPage() {
 
 export function MenuButtonPage() {
   return (
-    <DocPage group={G} title="메뉴 버튼" lead="같은 일을 하는 방법이 여러 개일 때 버튼 하나로 묶습니다. 누르면 고를 수 있는 메뉴가 펼쳐집니다.">
+    <DocPage group={G} title="메뉴 버튼" source={['components/ui/MenuButton.tsx']} lead="같은 일을 하는 방법이 여러 개일 때 버튼 하나로 묶습니다. 누르면 고를 수 있는 메뉴가 펼쳐집니다.">
       <Preview caption="눌러서 열고, 키보드 위아래 화살표로 옮길 수 있습니다.">
         <div className="flex min-h-40 items-start">
           <MenuButton
@@ -180,7 +180,7 @@ export function MenuButtonPage() {
 
 export function BadgePage() {
   return (
-    <DocPage group={G} title="상태 배지와 태그" lead="상태 배지는 점과 글자로 상태를 알립니다. 태그는 상태와 따로 붙는 짧은 표시입니다.">
+    <DocPage group={G} title="상태 배지와 태그" source={['components/ui/StatusBadge.tsx', 'components/ui/ScholarStatusBadge.tsx', 'components/ui/RequestStatusBadge.tsx', 'components/ui/Tag.tsx']} lead="상태 배지는 점과 글자로 상태를 알립니다. 태그는 상태와 따로 붙는 짧은 표시입니다.">
       <Section title="제출 상태">
         <Preview>
           <div className="flex flex-wrap gap-3">
@@ -273,7 +273,7 @@ export function FieldPage() {
   const [gpa, setGpa] = useState('4.7')
   const tooBig = Number(gpa) > 4.5
   return (
-    <DocPage group={G} title="입력 항목" lead="라벨, 입력칸, 도움말이나 오류 문구를 한 묶음으로 보여 줍니다.">
+    <DocPage group={G} title="입력 항목" source={['components/form/LabeledField.tsx', 'components/form/fieldClass.ts', 'components/form/FormError.tsx']} lead="라벨, 입력칸, 도움말이나 오류 문구를 한 묶음으로 보여 줍니다.">
       <Preview surface>
         <div className="flex max-w-md flex-col gap-6">
           <LabeledField label="학기 평점" required hint="예: 3.85">
@@ -361,7 +361,7 @@ export function SelectionPage() {
   const all = checked.every(Boolean)
   const some = checked.some(Boolean) && !all
   return (
-    <DocPage group={G} title="체크박스와 라디오" lead="브라우저 기본 모양은 Safari와 Chrome이 달라서 직접 그립니다. 보이는 크기는 16px이고, 누르는 영역은 감싸는 줄 전체입니다.">
+    <DocPage group={G} title="체크박스와 라디오" source={['components/form/Checkbox.tsx', 'components/form/Radio.tsx']} lead="브라우저 기본 모양은 Safari와 Chrome이 달라서 직접 그립니다. 보이는 크기는 16px이고, 누르는 영역은 감싸는 줄 전체입니다.">
       <Section title="체크박스">
         <Preview surface>
           <div className="flex max-w-sm flex-col">
@@ -401,7 +401,7 @@ export function SelectionPage() {
 export function FilterChipsPage() {
   const [v, setV] = useState<string | null>(null)
   return (
-    <DocPage group={G} title="필터 칩" lead="목록을 상태별로 나눠 봅니다. 하나만 고를 수 있고, 고른 칩은 검정 바탕입니다.">
+    <DocPage group={G} title="필터 칩" source={['components/ui/FilterChips.tsx']} lead="목록을 상태별로 나눠 봅니다. 하나만 고를 수 있고, 고른 칩은 검정 바탕입니다.">
       <Preview>
         <FilterChips
           label="제출 상태"
@@ -445,7 +445,7 @@ export function TablePage() {
   const [page, setPage] = useState(1)
   const [size, setSize] = useState(20)
   return (
-    <DocPage group={G} title="데이터 테이블" lead="담당자 목록(장학생 명단, 요청 관리, 제출 현황)에 쓰는 한 줄 표입니다. 열끼리 비교하기 쉽게 열 순서와 정렬을 모든 목록에서 같게 둡니다.">
+    <DocPage group={G} title="데이터 테이블" source={['components/ui/SortHeader.tsx', 'components/ui/RowNote.tsx', 'components/ui/Pagination.tsx', 'components/ui/PageSizeSelect.tsx']} lead="담당자 목록(장학생 명단, 요청 관리, 제출 현황)에 쓰는 한 줄 표입니다. 열끼리 비교하기 쉽게 열 순서와 정렬을 모든 목록에서 같게 둡니다.">
       <Preview caption="열 이름을 누르면 정렬됩니다. 마우스를 올리면 행 전체가 반응합니다.">
         <div className="overflow-x-auto rounded-lg bg-surface">
           <div className="min-w-[54rem]">
@@ -565,7 +565,7 @@ export function DialogPage() {
   const [form, setForm] = useState(false)
   const toast = useToast()
   return (
-    <DocPage group={G} title="대화상자" lead="되돌릴 수 없는 행동을 한 번 더 확인하거나, 짧은 입력을 받습니다. 한 번에 하나만 엽니다.">
+    <DocPage group={G} title="대화상자" source={['components/ui/ConfirmDialog.tsx', 'components/ui/FormDialog.tsx']} lead="되돌릴 수 없는 행동을 한 번 더 확인하거나, 짧은 입력을 받습니다. 한 번에 하나만 엽니다.">
       <Preview>
         <div className="flex flex-wrap gap-3">
           <Button variant="primary" size="default" onClick={() => setConfirm(true)}>
@@ -636,7 +636,7 @@ export function DialogPage() {
 
 export function BannerPage() {
   return (
-    <DocPage group={G} title="배너" lead="화면 전체에 해당하는 안내나 실패를 알립니다. 읽고 행동해야 하는 내용이라 사라지지 않습니다.">
+    <DocPage group={G} title="배너" source={['components/ui/Banner.tsx']} lead="화면 전체에 해당하는 안내나 실패를 알립니다. 읽고 행동해야 하는 내용이라 사라지지 않습니다.">
       <Preview surface>
         <div className="flex flex-col gap-3">
           <Banner tone="info" title="마감 연장을 받았어요">
@@ -679,7 +679,7 @@ export function BannerPage() {
 export function ToastPage() {
   const toast = useToast()
   return (
-    <DocPage group={G} title="토스트" lead="끝난 일의 결과를 한 줄로 알리고 4초 뒤 사라집니다.">
+    <DocPage group={G} title="토스트" source={['components/ui/Toast.tsx']} lead="끝난 일의 결과를 한 줄로 알리고 4초 뒤 사라집니다.">
       <Preview>
         <div className="flex flex-wrap gap-3">
           <Button onClick={() => toast('보완 요청을 보냈어요')}>토스트 띄우기</Button>
@@ -706,7 +706,7 @@ export function ToastPage() {
 
 export function StatePage() {
   return (
-    <DocPage group={G} title="불러오는 중과 빈 화면" lead="목록이 비었거나, 불러오는 중이거나, 불러오지 못했을 때 보여 줍니다.">
+    <DocPage group={G} title="불러오는 중과 빈 화면" source={['components/ui/StateView.tsx']} lead="목록이 비었거나, 불러오는 중이거나, 불러오지 못했을 때 보여 줍니다.">
       <Section title="불러오는 중">
         <Preview caption="0.3초 안에 끝나면 보이지 않습니다.">
           <LoadingCards count={2} />
@@ -742,7 +742,7 @@ export function StatePage() {
 
 export function RevisionNotePage() {
   return (
-    <DocPage group={G} title="보완 요청 메모" lead="담당자가 남긴 보완 요청 사유입니다. 경고 상자가 아니라 사람이 남긴 메모처럼 보이게, 바탕 없이 이름표와 글자로만 씁니다.">
+    <DocPage group={G} title="보완 요청 메모" source={['components/ui/RevisionNote.tsx']} lead="담당자가 남긴 보완 요청 사유입니다. 경고 상자가 아니라 사람이 남긴 메모처럼 보이게, 바탕 없이 이름표와 글자로만 씁니다.">
       <Preview surface>
         <div className="flex max-w-md flex-col gap-4">
           <div className="flex items-center gap-2">
@@ -773,7 +773,7 @@ export function RevisionNotePage() {
 
 export function NavigationPage() {
   return (
-    <DocPage group={G} title="페이지 제목과 메뉴" lead="화면 위쪽의 공통 요소입니다. 담당자 화면은 왼쪽 메뉴, 장학생 화면은 상단 바만 씁니다.">
+    <DocPage group={G} title="페이지 제목과 메뉴" source={['components/ui/PageTitle.tsx', 'components/ui/Logo.tsx', 'components/ui/MetaList.tsx', 'app/layouts/ManagerLayout.tsx']} lead="화면 위쪽의 공통 요소입니다. 담당자 화면은 왼쪽 메뉴, 장학생 화면은 상단 바만 씁니다.">
       <Section title="로고와 KT 스퀘어">
         <Preview surface>
           <div className="flex flex-wrap items-center gap-10">

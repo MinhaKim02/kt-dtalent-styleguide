@@ -1,5 +1,12 @@
+import { ArrowRight } from 'lucide-react'
 import { Link } from 'react-router'
+import { usedIn } from 'virtual:used-icons'
+import { BrandFlow } from '@fe/components/brand/BrandFlow'
+import { buttonClass } from '@fe/components/ui/buttonClass'
+import { KtSquare } from '@fe/components/ui/KtSquare'
 import { Code, DocPage, RuleTable, Rules, Section, Text } from '../docs/Doc'
+import { useCountUp } from '../docs/motion'
+import { tokens } from '../docs/tokens'
 import { nav } from '../nav'
 
 /* ───────── 소개 ───────── */
@@ -13,50 +20,99 @@ const principles = [
   ['할 행동을 먼저 쓴다', '화면 문구는 사용자가 할 일을 먼저 말하고, 오류는 이유와 고치는 법을 함께 씁니다.'],
 ]
 
+const iconCount = Object.keys(usedIn).length
+const styleCount = tokens.type.groups.reduce((n, g) => n + g.styles.length, 0)
+const componentCount = nav.find((g) => g.label === '컴포넌트')!.items.length
+
+function Stat({ value, label }: { value: number; label: string }) {
+  const n = useCountUp(value)
+  return (
+    <div className="flex flex-col gap-1">
+      <span className="text-number tabular-nums">{n}</span>
+      <span className="text-caption text-ink-3">{label}</span>
+    </div>
+  )
+}
+
 export function HomePage() {
   return (
-    <DocPage
-      group="시작하기"
-      title="KT디지털인재장학생 스타일가이드"
-      lead="KT디지털인재장학생 통합 운영 플랫폼의 디자인 기준입니다. 장학생은 성적증명서 같은 서류를 내고, 재단 담당자는 제출을 검토합니다. 이 사이트의 색, 글자, 컴포넌트는 서비스 코드에서 바로 불러와 그려서 실제 화면과 같습니다."
-    >
+    <article className="flex flex-col gap-20 md:gap-24">
+      {/* 첫 화면: 서비스 로그인 화면과 같은 브랜드 플로우가 흐른다 */}
+      <header className="hero relative isolate -mx-5 overflow-hidden md:-mx-0 md:rounded-xl">
+        <BrandFlow />
+        <div className="relative flex min-h-[26rem] flex-col justify-end gap-6 px-6 pt-24 pb-10 md:min-h-[32rem] md:px-12 md:pb-12">
+          <p className="hero-line flex items-center gap-2 text-caption font-semibold text-ink-2" style={{ animationDelay: '0.2s' }}>
+            <KtSquare />
+            KT그룹희망나눔재단
+          </p>
+          <h1 className="m-0 text-display-sm md:text-display">
+            <span className="hero-line block" style={{ animationDelay: '0.35s' }}>
+              KT디지털인재장학생
+            </span>
+            <span className="hero-line block text-ink-3" style={{ animationDelay: '0.5s' }}>
+              스타일가이드
+            </span>
+          </h1>
+          <p className="hero-line max-w-xl text-title-2 font-normal text-ink-2" style={{ animationDelay: '0.65s' }}>
+            장학생은 서류를 내고, 담당자는 검토합니다. 두 사람이 쓰는 화면의 색, 글자, 컴포넌트를 한곳에 모았습니다.
+          </p>
+          <div className="hero-line flex flex-wrap gap-3 pt-2" style={{ animationDelay: '0.8s' }}>
+            <Link to="/foundations/color" className={buttonClass({ variant: 'primary' })}>
+              기본 요소 보기
+            </Link>
+            <Link to="/components/button" className={buttonClass({ className: 'bg-surface/70 backdrop-blur-sm' })}>
+              컴포넌트 보기
+            </Link>
+          </div>
+        </div>
+      </header>
+
+      <section data-reveal className="grid grid-cols-2 gap-x-6 gap-y-8 border-y border-line-subtle py-10 md:grid-cols-4">
+        <Stat value={tokens.color.tokens.length} label="색 토큰" />
+        <Stat value={styleCount} label="글자 스타일" />
+        <Stat value={componentCount} label="컴포넌트 문서" />
+        <Stat value={iconCount} label="서비스에서 쓰는 아이콘" />
+      </section>
+
       <Section title="디자인 원칙">
-        <ol className="m-0 grid list-none gap-4 p-0 md:grid-cols-2">
+        <ol className="m-0 grid list-none gap-x-10 gap-y-10 p-0 md:grid-cols-2 xl:grid-cols-3">
           {principles.map(([t, d], i) => (
-            <li key={t} className="flex flex-col gap-2 rounded-lg bg-canvas p-6">
-              <span className="text-caption text-ink-3 tabular-nums">{String(i + 1).padStart(2, '0')}</span>
+            <li key={t} className="flex flex-col gap-3 border-t border-ink pt-5">
+              <span className="text-label-sm text-ink-3 tabular-nums">{String(i + 1).padStart(2, '0')}</span>
               <span className="text-title-2">{t}</span>
-              <span className="text-body text-ink-2">{d}</span>
+              <span className="text-body-long text-ink-2">{d}</span>
             </li>
           ))}
         </ol>
       </Section>
 
       <Section title="누가 쓰나">
-        <RuleTable
-          head={['사용자', '주로 쓰는 기기', '하는 일']}
-          rows={[
-            ['장학생', '휴대폰', '마감 전에 성적을 입력하고 성적증명서를 올려 제출, 보완 요청을 받으면 고쳐서 다시 제출'],
-            ['재단 담당자', 'PC', '요청을 만들어 공개, 제출 현황을 보고 하나씩 검토, 장학생 명단 관리, 엑셀로 내려받기'],
-          ]}
-        />
+        <div className="grid gap-4 md:grid-cols-2">
+          {[
+            ['장학생', '주로 휴대폰', '마감 전에 성적을 입력하고 성적증명서를 올려 제출합니다. 보완 요청을 받으면 고쳐서 다시 냅니다.'],
+            ['재단 담당자', '주로 PC', '요청을 만들어 공개하고, 제출 현황을 보며 하나씩 검토합니다. 장학생 명단을 관리하고 엑셀로 내려받습니다.'],
+          ].map(([who, device, what]) => (
+            <div key={who} className="flex flex-col gap-3 rounded-lg bg-canvas p-6">
+              <div className="flex items-baseline justify-between gap-3">
+                <span className="text-title-2">{who}</span>
+                <span className="text-caption text-ink-3">{device}</span>
+              </div>
+              <p className="text-body-long text-ink-2">{what}</p>
+            </div>
+          ))}
+        </div>
       </Section>
 
       <Section title="구성">
         <div className="grid gap-4 md:grid-cols-2">
           {nav.slice(1).map((g) => (
-            <div key={g.label} className="flex flex-col gap-3 rounded-lg p-6 ring-1 ring-line-subtle">
-              <span className="text-label">{g.label}</span>
-              <ul className="m-0 flex list-none flex-wrap gap-x-4 gap-y-1.5 p-0">
-                {g.items.map((it) => (
-                  <li key={it.path}>
-                    <Link to={it.path} className="text-body text-ink-2 underline-offset-4 hover:text-ink">
-                      {it.label}
-                    </Link>
-                  </li>
-                ))}
-              </ul>
-            </div>
+            <Link key={g.label} to={g.items[0].path} className="group flex flex-col gap-3 rounded-lg p-6 text-ink no-underline ring-1 ring-line-subtle transition-shadow hover:ring-line">
+              <span className="flex items-center justify-between text-label">
+                {g.label}
+                <ArrowRight size={16} strokeWidth={2} aria-hidden className="text-ink-3 transition-transform group-hover:translate-x-1 group-hover:text-ink" />
+              </span>
+              <span className="text-body text-ink-3">{g.items.map((it) => it.label).join(', ')}</span>
+            </Link>
           ))}
         </div>
       </Section>
@@ -71,7 +127,7 @@ export function HomePage() {
           ]}
         />
       </Section>
-    </DocPage>
+    </article>
   )
 }
 
